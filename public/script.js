@@ -44,6 +44,34 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     }
 });
 
+document.getElementById('contactForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const formProps = Object.fromEntries(formData);
+  
+    try {
+      const response = await fetch('http://localhost:5000/service-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formProps),
+      });
+  
+      if (response.ok) {
+        alert('Service request submitted successfully!');
+        e.target.reset();
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred. Please try again.');
+    }
+  });
+  
+  // Similar event listeners for login and register forms
 // Login form submission
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
