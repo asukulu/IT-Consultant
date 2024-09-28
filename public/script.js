@@ -1,169 +1,53 @@
 const API_URL = 'http://localhost:5000'; // Replace with your actual API URL
 
-// Helper function to show/hide sections
-function showSection(sectionId) {
-    document.querySelectorAll('main > section').forEach(section => section.style.display = 'none');
-    document.getElementById(sectionId).style.display = 'block';
-}
-
-// Helper function to update navigation based on authentication status
-function updateNavigation(isLoggedIn) {
-    document.getElementById('loginNav').style.display = isLoggedIn ? 'none' : 'block';
-    document.getElementById('registerNav').style.display = isLoggedIn ? 'none' : 'block';
-    document.getElementById('dashboardNav').style.display = isLoggedIn ? 'block' : 'none';
-}
-
-// Check if user is logged in on page load
-if (localStorage.getItem('token')) {
-    updateNavigation(true);
-} else {
-    updateNavigation(false);
-}
-
-// Register form submission
-document.getElementById('registerForm').addEventListener('submit', async (e) => {
+document.getElementById("contactForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const userData = Object.fromEntries(formData.entries());
-    try {
-        const response = await fetch(`${API_URL}/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
-        });
-        if (response.ok) {
-            alert('Registration successful. Please log in.');
-            showSection('login');
-        } else {
-            const error = await response.json();
-            alert(error.message);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.');
-    }
-});
+    var form = this;
 
-document.getElementById('contactForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const formProps = Object.fromEntries(formData);
-  
-    try {
-      const response = await fetch('http://localhost:5000/service-request', {
-        method: 'POST',
+    fetch(form.action, {
+        method: form.method,
+        body: new FormData(form),
         headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formProps),
-      });
-  
-      if (response.ok) {
-        alert('Service request submitted successfully!');
-        e.target.reset();
-      } else {
-        const error = await response.json();
-        alert(`Error: ${error.message}`);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again.');
-    }
-  });
-  
-  // Similar event listeners for login and register forms
-// Login form submission
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const loginData = Object.fromEntries(formData.entries());
-    try {
-        const response = await fetch(`${API_URL}/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(loginData)
-        });
-        if (response.ok) {
-            const { token } = await response.json();
-            localStorage.setItem('token', token);
-            updateNavigation(true);
-            showSection('dashboard');
-            loadServiceHistory();
-        } else {
-            const error = await response.json();
-            alert(error.message);
+            'Accept': 'application/json'
         }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.');
+    }).then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Thanks for your submission!");
+            form.reset();
+        } else {
+            alert("Oops! There was a problem submitting your form");
+        }
+    }).catch(error => {
+        alert("Oops! There was a problem submitting your form");
+    });
+});
+
+// Show/hide "Other Service" input based on service selection
+document.getElementById('service').addEventListener('change', function() {
+    var otherServiceInput = document.getElementById('otherService');
+    if (this.value === 'other') {
+        otherServiceInput.style.display = 'block';
+        otherServiceInput.setAttribute('required', '');
+    } else {
+        otherServiceInput.style.display = 'none';
+        otherServiceInput.removeAttribute('required');
     }
 });
 
-// Service request form submission
-document.getElementById('serviceRequestForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const serviceData = Object.fromEntries(formData.entries());
-    try {
-        const response = await fetch(`${API_URL}/service-request`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify(serviceData)
-        });
-        if (response.ok) {
-            alert('Service request submitted successfully.');
-            e.target.reset();
-            loadServiceHistory();
-        } else {
-            const error = await response.json();
-            alert(error.message);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again.');
-    }
-});
+// Back to Top button functionality
+window.onscroll = function() {scrollFunction()};
 
-// Load service history
-async function loadServiceHistory() {
-    try {
-        const response = await fetch(`${API_URL}/service-history`, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-        if (response.ok) {
-            const serviceRequests = await response.json();
-            const historyHtml = serviceRequests.map(request => `
-                <div>
-                    <h4>${request.service}</h4>
-                    <p>Description: ${request.description}</p>
-                    <p>Status: ${request.status}</p>
-                    <p>Submitted: ${new Date(request.createdAt).toLocaleDateString()}</p>
-                </div>
-            `).join('');
-            document.getElementById('serviceHistory').innerHTML = historyHtml;
-        } else {
-            const error = await response.json();
-            console.error('Error loading service history:', error);
-        }
-    } catch (error) {
-        console.error('Error:', error);
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("back-to-top").style.display = "block";
+    } else {
+        document.getElementById("back-to-top").style.display = "none";
     }
 }
 
-// Navigation event listeners
-document.getElementById('loginNav').addEventListener('click', () => showSection('login'));
-document.getElementById('registerNav').addEventListener('click', () => showSection('register'));
-document.getElementById('dashboardNav').addEventListener('click', () => {
-    if (localStorage.getItem('token')) {
-        showSection('dashboard');
-        loadServiceHistory();
-    } else {
-        alert('Please log in to access the dashboard.');
-        showSection('login');
-    }
+document.getElementById("back-to-top").addEventListener("click", function(e) {
+    e.preventDefault();
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 });
