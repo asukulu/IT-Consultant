@@ -363,58 +363,77 @@ footer nav ul {
     }
 
     /* Mobile Menu Styles */
-    
-/* Mobile Menu Styles */
-.mobile-menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-}
-
-.mobile-menu-toggle .bar {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: #fff;
-    margin: 5px 0;
-}
-
-.nav-menu {
-    display: flex;
-    flex-direction: row;
-    list-style: none;
-}
-
-@media (max-width: 768px) {
     .mobile-menu-toggle {
-        display: block;
-    }
-
-    .nav-menu {
         display: none;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background-color: #1a2a3a;
-        padding: 20px;
-        flex-direction: column;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
     }
-
-    .nav-menu.active {
-        display: flex;
+    
+    .mobile-menu-toggle .bar {
+        display: block;
+        width: 25px;
+        height: 3px;
+        background-color: #333;
+        margin: 5px 0;
     }
-
-    .nav-menu li {
-        margin: 10px 0;
+    
+    @media (max-width: 768px) {
+        .mobile-menu-toggle {
+            display: block;
+        }
+    
+        .nav-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    
+        .nav-menu.active {
+            display: block;
+        }
+    
+        .nav-menu ul {
+            flex-direction: column;
+        }
+    
+        .nav-menu li {
+            margin: 10px 0;
+        }
     }
-
     .social-icons {
         display: none;
     }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .service-item {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .contact-content {
+        flex-direction: column;
+    }
+
+    .contact-info, form {
+        width: 100%;
+    }
 }
+
 /* Improve touch experience for service carousel */
 @media (hover: none) and (pointer: coarse) {
     .prev-btn, .next-btn {
