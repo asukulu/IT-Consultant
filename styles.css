@@ -360,7 +360,15 @@ footer nav ul {
 
     form {
         margin-left: 0;
+        width: 100%;
     }
+
+    form input,
+    form textarea,
+    form select {
+        width: 100%;
+    }
+}
 
     /* Mobile Menu Styles */
     /* Mobile menu styles */
@@ -484,4 +492,3 @@ footer nav ul {
         padding: 15px;
     }
 }
-
