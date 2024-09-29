@@ -1,7 +1,4 @@
-if (typeof MathMLElement === 'undefined') {
-    // Polyfill or alternative implementation for browsers that don't support MathMLElement
-    window.MathMLElement = function() {};
-}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile menu functionality
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
