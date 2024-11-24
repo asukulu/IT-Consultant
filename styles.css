@@ -33,12 +33,32 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-right:150px;
+    margin-left: 40px;
 }
 
 .logo {
     font-size: 24px;
     font-weight: bold;
     margin-right: auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    padding: -1px 0;
+}
+
+.logo svg {
+    height: 60px;
+    width: auto;
+    color: #e6e5e5;
+}
+
+@media (max-width: 768px) {
+    .logo svg {
+        height: 40px;
+    }
 }
 
 nav ul {
